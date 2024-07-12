@@ -22,4 +22,4 @@
             clusterwide: false
         resources_url: https://github.com/zaskan/ansible-eda-netops-demo.git
         target_revision: main
-        resources_path: "environment/resources/"
+        resources_path: "vars/environment/resources/"
