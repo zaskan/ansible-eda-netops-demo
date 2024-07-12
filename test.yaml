@@ -6,7 +6,7 @@
         name: ansible_automation_platform.casc.deploy_gitops
       vars:
         demoNamespaces: 
-          - name: test
+          - name: aap
         operators:
           - name: openshift-gitops-operator
             namespace: openshift-operators
