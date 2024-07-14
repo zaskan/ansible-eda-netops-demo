@@ -1,0 +1,5 @@
+applications:
+  - name: "Ansible EDA Application"
+    desc: "Ansible EDA Application"
+    org: Default
+    auth_grant_type: password

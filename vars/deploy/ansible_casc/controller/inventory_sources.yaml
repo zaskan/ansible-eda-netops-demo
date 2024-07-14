@@ -1,0 +1,9 @@
+inventory_sources:
+   - name: "Servicenow Inventory Source"
+     desc: "Servicenow Inventory Source"
+     org: Default
+     source: scm
+     source_path: "inventory.now.yml" 
+     project: "Ansible Pipelines Project"
+     credential: "ServiceNow Credential"
+     inventory: "Networking Infrastructure"

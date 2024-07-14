@@ -1,0 +1,3 @@
+execution_enviroments:
+  - name: "Ansible EDA Execution Environment"
+    desc: "image-registry.openshift-image-registry.svc:5000/{{ ansible_demo_namespace }}/ansible-eda-ee:2.0"

@@ -1,0 +1,9 @@
+projects:
+  - name: "Ansible Pipelines Project"
+    desc: "Ansible Pipelines Project"
+    org: Default
+    git_url: "http://gitea.{{ ocp_ingress_domain[0] }}/gitea/ansible-pipelines.git"
+    git_branch: master
+    git_cred: ""
+    update_on_launch: no
+

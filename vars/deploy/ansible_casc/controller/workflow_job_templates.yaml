@@ -1,0 +1,267 @@
+workflowjobtemplates:
+  - name: "[WF] Process New Cloud Router Request"
+    org: Default
+    inv: ""
+    ask_variables_on_launch: true
+    ask_limit_on_launch: true
+    allow_simultaneous: true
+    extra_vars: {"rulebooks": ["Kafka Rulebook"]}
+    steps:
+       - identifier: Provision Infrastructure
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Provision Infrastructure"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Stop EDA Rulebook"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Stop EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Stop EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Auto-Discovery"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: "Auto-Discovery"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Discovery Infrastructure"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+            - identifier: "Configure Model-Driven Telemetry and Base Line"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: "Configure Model-Driven Telemetry and Base Line"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Configure Model-Driven Telemetry and Base Line"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Apply custom configuration"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: "Apply custom configuration"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Apply custom configuration"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Start EDA Rulebook"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Start EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Start EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes: []
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+
+
+  - name: "[WF] Check Device operational State"
+    org: Default
+    inv: ""
+    ask_variables_on_launch: true
+    ask_limit_on_launch: true
+    extra_vars: {"rulebooks": ["Kafka Rulebook"]}
+    allow_simultaneous: true
+    steps:
+       - identifier: "Check Cloud Router BGP operational state"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Check Cloud Router BGP operational state"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes: []
+           failure_nodes: 
+             - identifier: "Open Servicenow Incident"
+           always_nodes: []
+           credentials: []
+       - identifier: Open Servicenow Incident
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Open Servicenow Incident"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Stop EDA Rulebook"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Stop EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Stop EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Fix Cloud Router BGP operational state"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Fix Cloud Router BGP operational state
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Fix Cloud Router BGP operational state"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Post-Check Cloud Router BGP operational state"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: "Post-Check Cloud Router BGP operational state"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Check Cloud Router BGP operational state"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Start EDA Rulebook"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Start EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Start EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Close Servicenow Incident"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Close Servicenow Incident
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Close Servicenow Incident"
+           type: job_template
+         credentials: []
+  - name: "[WF] Update Device Configuration"
+    org: Default
+    inv: ""
+    extra_vars: {"rulebooks": ["Kafka Rulebook","Webhook Rulebook"]}
+    ask_variables_on_launch: true
+    ask_limit_on_launch: true
+    allow_simultaneous: true
+    steps:
+       - identifier: "Analyze Commit and Inventory Host"
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Analyze Commit and Inventory Host"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Stop EDA Rulebook"
+           failure_nodes: 
+             - identifier: "Approve Production Changes"
+           always_nodes: []
+           credentials: []
+       - identifier: Approve Production Changes
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Stop EDA Rulebook"
+           type: workflow_approval
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: Stop EDA Rulebook
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Stop EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Stop EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Update desired config file"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Update desired config file
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Update desired config file"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Apply configuration"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Apply configuration
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Apply configuration"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes:
+             - identifier: "Start EDA Rulebook"
+           failure_nodes: []
+           always_nodes: []
+           credentials: []
+       - identifier: Start EDA Rulebook
+         unified_job_template:
+           organization:
+             name: Default
+           name: "[JT] Start EDA Rulebook"
+           type: job_template
+         credentials: []
+         related:
+           success_nodes: []
+           failure_nodes: []
+           always_nodes: []
+           credentials: []

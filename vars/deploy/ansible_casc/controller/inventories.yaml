@@ -1,0 +1,12 @@
+inventories: 
+  - name: "Automation Controller Inventory"
+    desc: "Automation Controller Inventory"
+    org: Default
+    vars: {}
+  - name: "Networking Infrastructure"
+    desc: "Networking Infrastructure"
+    org: Default
+    vars:
+      ansible_connection: ansible.netcommon.network_cli
+      ansible_network_os: cisco.ios.ios
+      ansible_python_interpreter: python

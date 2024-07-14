@@ -1,0 +1,257 @@
+jobtemplates:
+  - name: "[JT] Trigger Cloud Router Deploy Workflow"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/controller/trigger_deploy_workflow.yml"
+    creds:
+      - "Red Hat Ansible Automation Platform Credential"
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_limit_on_launch: false
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Provision Infrastructure"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/aws/aws-infra-provision.yml"
+    creds: 
+      - "Amazon Web Services Credential"
+      - "Amazon Web Services Key Pair"
+      - "OpenShift API Bearer Token"
+      - "Red Hat Ansible Automation Platform Credential"
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_variables_on_launch: false
+    ask_limit_on_launch: false
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars: 
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Discovery Infrastructure"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/aws/aws-infra-discovery.yml"
+    creds: 
+      - "ServiceNow Credential"
+      - "Amazon Web Services Key Pair"
+      - "Red Hat Ansible Automation Platform Credential"
+      - "Gitea Credential"
+    use_fact_cache:  true
+    ask_variables_on_launch:  true
+    ask_limit_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars: {}
+
+  - name: "[JT] Configure Model-Driven Telemetry and Base Line"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/aws/aws-infra-bastion.yml"
+    creds: 
+      - "Amazon Web Services Key Pair"
+      - "OpenShift API Bearer Token"
+    use_fact_cache:  true
+    ask_variables_on_launch:  true
+    ask_limit_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Default execution environment"
+    extra_vars: {}
+ 
+  - name: "[JT] Apply custom configuration"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/aws/aws-infra-configure.yml"
+    creds: 
+      - "Amazon Web Services Key Pair"
+      - "Gitea Credential"
+      - "ServiceNow Credential"
+    use_fact_cache:  true
+    ask_variables_on_launch:  true
+    ask_limit_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars: {}
+
+  - name: "[JT] Apply configuration"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/apply_configuration.yml"
+    creds: 
+      - "Amazon Web Services Key Pair"
+      - "Gitea Credential"
+      - "ServiceNow Credential"
+    use_fact_cache:  true
+    ask_variables_on_launch:  true
+    ask_limit_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars: {}
+
+  - name: "[JT] Trigger Cloud Router BGP validation"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/controller/trigger_bgp_validation_workflow.yml"
+    creds:
+      - "Red Hat Ansible Automation Platform Credential"
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Trigger Cloud Router Configuration Change"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/parse_webhook.yml"
+    creds:
+      - "Red Hat Ansible Automation Platform Credential"
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Check Cloud Router BGP operational state"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/check_operational_state.yml"
+    creds:
+      - "Amazon Web Services Key Pair"
+      - "Red Hat Ansible Automation Platform Credential"
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Fix Cloud Router BGP operational state"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/fix_operational_state.yml"
+    creds:
+      - "Amazon Web Services Key Pair"
+      - "Red Hat Ansible Automation Platform Credential"
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Stop EDA Rulebook"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/EDA/eda_delete_activation.yml"
+    creds:
+      - "Red Hat Event-Driven Ansible Credential"
+    use_fact_cache: false
+    ask_limit_on_launch: false
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Start EDA Rulebook"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/EDA/eda_create_activation.yml"
+    creds:
+      - "Red Hat Ansible Automation Platform Credential"
+      - "Red Hat Event-Driven Ansible Credential"
+      - "OpenShift API Bearer Token"
+    use_fact_cache: false
+    ask_limit_on_launch: false
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Open Servicenow Incident" 
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/servicenow/open-snow-incident.yml"
+    creds:
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_limit_on_launch: false
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Close Servicenow Incident"
+    org: Default
+    inv: "Automation Controller Inventory"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/servicenow/close-snow-incident.yml"
+    creds:
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_limit_on_launch: false
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Analyze Commit and Inventory Host"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/check_environment.yml"
+    creds: []
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars: 
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
+
+  - name: "[JT] Update desired config file"
+    org: Default
+    inv: "Networking Infrastructure"
+    project: "Ansible Pipelines Project"
+    playbook: "playbooks/networking/discovery.yml"
+    creds:
+      - "Gitea Credential"
+      - "Amazon Web Services Credential"
+      - "Amazon Web Services Key Pair"
+      - "Red Hat Ansible Automation Platform Credential"
+      - "ServiceNow Credential"
+    use_fact_cache: false
+    ask_limit_on_launch:  true
+    ask_variables_on_launch:  true
+    allow_simultaneous: true
+    execution_environment: "Ansible EDA Execution Environment"
+    extra_vars:
+      ansible_demo_namespace: "{{ ansible_demo_namespace }}"
